@@ -133,7 +133,7 @@ class PostController extends Controller
     /**
      * 投稿削除処理
      */
-    public function delete($id)
+    public function delete(Request $request,$id)
     {
         // idから投稿を取得
         $post = Post::find($id);
@@ -158,8 +158,10 @@ class PostController extends Controller
 
         // データ登録
         $post->is_deleted = true;
-        $post->save();
+        $post->delete();
 
         return redirect('/');
+
+        
     }
 }
