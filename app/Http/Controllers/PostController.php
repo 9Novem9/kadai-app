@@ -44,6 +44,14 @@ class PostController extends Controller
         $post->content = $request->postContent;
         $post->save();
 
+        
+        if (strlen($post['posts']) > 140) {
+            return view('post.index');
+        }
+
+
+
+        
         return redirect('/');
     }
 
