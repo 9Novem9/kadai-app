@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Http\Controllers\Controller,
     Session;
 
+
 class PostController extends Controller
 {
     /**
@@ -29,6 +30,7 @@ class PostController extends Controller
      */
     function store(Request $request)
     {
+
         // セッションにログイン情報があるか確認
         if (!Session::exists('user')) {
             // ログインしていなければログインページへ
@@ -38,20 +40,19 @@ class PostController extends Controller
         // ログイン中のユーザーの情報を取得する
         $loginUser = Session::get('user');
 
+      
         // データ登録
         $post = new Post;
         $post->user = $loginUser->id;
         $post->content = $request->postContent;
         $post->save();
 
-        
-        if (strlen($post['posts']) > 140) {
-            return view('post.index');
-        }
+        $post->validate($request,["post" => 'max:140|min:1',]);
+        $messages = ['max' => '140字以下にしてください', 'min' => '必須項目です'];
+        Validator::make($request->all(), $post, $messages)->validate();
 
+    
 
-
-        
         return redirect('/');
     }
 
