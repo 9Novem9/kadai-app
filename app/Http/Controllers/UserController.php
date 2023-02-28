@@ -122,8 +122,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO 登録処理
+       // 入力されたユーザーが存在するか確認
+       $user = User::where('email', $request->email)->first();
+       $errorMessage = 'ユーザーが存在しないかパスワードが間違っています';
+       if ($user == null) {
+           return view('login', compact('errorMessage'));
+       }
 
-        return redirect('/');
+       // パスワードがあっているか確認
+       if ($user->password != $request->password) {
+           return view('login', compact('errorMessage'));
+       }
+
+       // 成功
+       Session::put('user', $user);
+       return redirect('/');
     }
 }

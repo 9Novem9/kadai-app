@@ -23,6 +23,13 @@
         </form>
     </div>
 </body>
+@error('postContent')
+  <div class="mt-3">
+      <p class="text-red-500">
+          {{ $message }}
+      </p>
+  </div>
+@enderror
 <script src="{{ asset('/js/app.js') }}"></script>
 <style scoped>
     .post-page .form {

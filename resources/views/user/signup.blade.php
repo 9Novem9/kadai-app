@@ -11,33 +11,70 @@
 </head>
 <!-- ログイン画面 -->
 
-<body class="">
+body class="">
     <x-header></x-header>
-    <div class="page singup-page">
-        <h2>課題: ここに新規登録ページを作ること</h2>
-        <h3>必要なフォームパーツ</h3>
-        <ul>
-            <li>Email入力フォーム</li>
-            <li>パスワード入力フォーム</li>
-            <li>登録ボタン</li>
-        </ul>
-        <h3>バリデーションルール</h3>
-        <h4>メールアドレス</h4>
-        <ul>
-            <li>●●●@×××の形式になっていること</li>
-            <li>半角英数、記号のみを許容すること</li>
-        </ul>
-        <h4>パスワード</h4>
-        <ul>
-            <li>半角英数、記号のみを許容すること</li>
-            <li>8文字以上であること</li>
-        </ul>
-        <p>
-            JavascriptとUserControllorの両方で同じバリデーションを設けること
-        </p>
+    <div class="page login-page">
+        <form class="form" action="/login" method="post">
+            @csrf
+            <div class="form-item email">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" />
+            </div>
+            <div class="form-item password">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" />
+            </div>
+           
+            <div class="login-button">
+                <button class="button-white" type="submit">登録</button>
+            </div>
+        </form>
     </div>
 </body>
 <script src="{{ asset('/js/app.js') }}"></script>
-<style scoped></style>
+<style scoped>
+    .login-page {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .login-page .title {
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .login-page .form {
+        width: 60vw;
+    }
+    
+    .login-page input {
+        height: 30px;
+        border-radius: 10px;
+        background-color: lightgray;
+    }
+    
+    .login-page .form-item {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    
+    .login-page .login-button {
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .login-page button {
+        width: 60%;
+        height: 30px;
+        font-size: 20px;
+    }
+    
+    .login-page .error-message {
+        margin-top: 5px;
+        font-size: 20px;
+    }
+</style>
 
 </html>
