@@ -9,23 +9,23 @@
 
     <title>kadai-app | 新規登録</title>
 </head>
-<!-- ログイン画面 -->
+<!-- 新規登録画面 -->
 
-body class="">
+<body class="">
     <x-header></x-header>
-    <div class="page login-page">
-        <form class="form" action="/login" method="post">
+    <div class="page touroku-page">
+        <form class="form" action="/signup" method="post">
             @csrf
             <div class="form-item email">
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email" />
+                <input type="text" id="newemail" name="newemail" />
             </div>
             <div class="form-item password">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" />
+                <input type="password" id="newpassword" name="newpassword" />
             </div>
            
-            <div class="login-button">
+            <div class="signup-button">
                 <button class="button-white" type="submit">登録</button>
             </div>
         </form>
