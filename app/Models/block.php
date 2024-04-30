@@ -6,19 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
-class Follow extends Model
+class Block extends Model
 {
     use HasFactory;
-
- 
-    public function block()
-    {
     
+    public function blockuser()
+    {
+        return User::find($this->blocks);
     }
 
    
-    public function as()
+    public function blockeruser()
     {
-    
+        return User::find($this->user);
     }
 }

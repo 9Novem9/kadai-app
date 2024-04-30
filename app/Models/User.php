@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Follow;
+use App\Models\Block;
 use App\Models\Post;
 
 class User extends Model
@@ -79,6 +80,53 @@ class User extends Model
     {
         Follow::where('user', $this->id)
             ->where('follow_user', $id)
+            ->first()
+            ->delete();
+    }
+ 
+    public function blockusers()
+    {
+        $blockusers = Block::where('user', $this->id)->get();
+        $result = [];
+        foreach ($blockusers as $blockuser) {
+            array_push($result, $blockuser->blockuser());
+        }
+        return $result;
+    }
+   
+    public function blockerusers()
+    {
+        $blockerusers = Block::where('blocks', $this->id)->get();
+        $result = [];
+        foreach ($blockerusers as $blockuser) {
+            array_push($result, $blockuser->blockeruser());
+        }
+        return $result;
+    }
+ 
+    public function isblocked($id)
+    {
+        foreach ($this->blockusers() as $blockuser) {
+            if ($blockusers->id == $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+     
+    public function block($id)
+    {
+        $block = new Block;
+        $block->user = $this->id;
+        $block->block = $id;
+        $block->save();
+    }
+
+    public function unblock($id)
+    {
+        Block::where('user', $this->id)
+            ->where('block', $id)
             ->first()
             ->delete();
     }

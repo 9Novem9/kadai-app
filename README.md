@@ -25,7 +25,7 @@
 
 コマンドを実行
 
-```composer update```
+```composer update --ignore-platform-req=ext-fileinfo ```
 
 <h2>3. データベースの構築</h2>
 
