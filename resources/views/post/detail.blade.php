@@ -27,7 +27,7 @@
 
             <div class="menu">
                 <div class="menu-item font-blue">
-                    <a href="/post/edit/{{ $post->id }}">編集</a>
+                    <a href="/post/edit/{{ $post->id }}">へえんしゅうう</a>
                 </div>
                 <form name="delete" action="/post/delete/{{ $post->id }}" method="post">
                     @csrf

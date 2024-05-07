@@ -23,14 +23,11 @@ class BlockController extends Controller
         }
 
     
-        $blockusers = $user->fblockusers();
-        $blockerusers = $user->blockerusers();
-
-    
+      
         $loginUser = Session::get('user');
 
       
-        return view('user.block', compact('user', 'blockusers', 'blockerusers'));
+        return view('user.block', compact('user', 'blockUsers', 'blockerUsers'));
     }
 
  

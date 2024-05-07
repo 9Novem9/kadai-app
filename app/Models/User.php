@@ -84,30 +84,30 @@ class User extends Model
             ->delete();
     }
  
-    public function blockusers()
+    public function blockUsers()
     {
-        $blockusers = Block::where('user', $this->id)->get();
+        $blockUsers = Block::where('user', $this->id)->get();
         $result = [];
-        foreach ($blockusers as $blockuser) {
-            array_push($result, $blockuser->blockuser());
+        foreach ($blockUsers as $blockUser) {
+            array_push($result, $blockUser->blockUser());
         }
         return $result;
     }
    
-    public function blockerusers()
+    public function blockerUsers()
     {
-        $blockerusers = Block::where('blocks', $this->id)->get();
+        $blockerUsers = Block::where('blocks', $this->id)->get();
         $result = [];
-        foreach ($blockerusers as $blockuser) {
-            array_push($result, $blockuser->blockeruser());
+        foreach ($blockerUsers as $blockUser) {
+            array_push($result, $blockUser->blockerUser());
         }
         return $result;
     }
  
     public function isblocked($id)
     {
-        foreach ($this->blockusers() as $blockuser) {
-            if ($blockusers->id == $id) {
+        foreach ($this->blockUsers() as $blockUser) {
+            if ($blockUser->id == $id) {
                 return true;
             }
         }

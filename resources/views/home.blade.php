@@ -14,6 +14,9 @@
 
 <body class="">
     <x-header></x-header>
+    <div class="post-button">
+                <button class="button-white" type="submit">投稿する</button>
+            </div>
     <div class="page home-page">
         <div class="page-title">ホーム</div>
         <div class="post-list">
