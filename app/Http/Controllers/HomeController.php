@@ -25,6 +25,7 @@ class HomeController extends Controller
 
         // フォローしているユーザーを取得
         $users = $loginUser->followUsers();
+        $users = $loginUser->blockUsers();
         // ログインしているユーザー自身も表示に含める
         array_push($users, $loginUser);
         // 各ユーザーの投稿を取得

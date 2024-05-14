@@ -119,14 +119,14 @@ class User extends Model
     {
         $block = new Block;
         $block->user = $this->id;
-        $block->block = $id;
+        $block->blocks = $id;
         $block->save();
     }
 
     public function unblock($id)
     {
         Block::where('user', $this->id)
-            ->where('block', $id)
+            ->where('blocks', $id)
             ->first()
             ->delete();
     }

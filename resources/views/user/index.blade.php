@@ -43,7 +43,7 @@
                                 @csrf @method('PUT') @if ($isblocked)
                                 <input type="hidden" name="isblocked" value="0" />
                                 <button class="button-white" onClick="unblock()">
-                                        ブラック済み
+                                        ブロック済み
                                     </button> @else
                                 <input type="hidden" name="isblocked" value="1" />
                                 <button class="button-black">
@@ -88,6 +88,8 @@
                         </div>
                     </div>
                 </a>
+           
+           
                 @endforeach
             </div>
         </div>
@@ -101,6 +103,15 @@
             document.follow.submit();
         }
     }
+    function unblock() {
+        if (confirm("ブロックを解除しますか?")) {
+            document.block.submit();
+        }
+    }
+
+
+
+
 </script>
 <style scoped>
     .user-page .page-container {
