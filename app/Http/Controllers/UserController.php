@@ -29,6 +29,7 @@ class UserController extends Controller
         }
 
         // ユーザーの投稿を取得
+        
         $posts = $user->posts();
         // フォロー/フォロワー数の取得
         $followCount = count($user->followUsers());

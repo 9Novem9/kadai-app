@@ -19,36 +19,43 @@
             <div class="user-info">
                 <div class="user">
                     <div class="user-row">
-                        <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" /> @if ($isOwnPage)
+                        <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
+                        @if ($isOwnPage)
                         <a href="/user/edit/{{ $user->id }}">
                             <button class="button-white edit">編集</button>
                         </a>
                         @else
                         <div class="follow-info">
                             <form name="follow" action="/follow/{{ $user->id }}" method="post">
-                                @csrf @method('PUT') @if ($isFollowed)
+                                @csrf @method('PUT') 
+                                @if ($isFollowed)
                                 <input type="hidden" name="isFollow" value="0" />
                                 <button class="button-white" onClick="unfollow()">
-                                        フォロー済み
-                                    </button> @else
+                                    フォロー済み
+                                </button> 
+                                @else
                                 <input type="hidden" name="isFollow" value="1" />
                                 <button class="button-black">
-                                        フォロー
-                                    </button> @endif
+                                    フォロー
+                                </button> 
+                                @endif
                             </form>
                         </div>
                      
                         <div class="block-info">
                             <form name="block" action="/block/{{ $user->id }}" method="post">
-                                @csrf @method('PUT') @if ($isblocked)
+                                @csrf @method('PUT') 
+                                @if ($isblocked)
                                 <input type="hidden" name="isblocked" value="0" />
-                                <button class="button-white" onClick="unblock()">
-                                        ブロック済み
-                                    </button> @else
+                                <button class="button-white" id="blockButton" onClick="unblock()">
+                                    ブロック済み
+                                </button> 
+                                @else
                                 <input type="hidden" name="isblocked" value="1" />
-                                <button class="button-black">
-                                        ブロック
-                                    </button> @endif
+                                <button class="button-black" id="blockButton">
+                                    ブロック
+                                </button> 
+                                @endif
                             </form>
                         </div>
                         @endif
@@ -71,7 +78,7 @@
                     </a>
                 </div>
             </div>
-            <div class="post-list">
+            <div class="post-list" id="postList">
                 <div class="title">投稿一覧</div>
                 @foreach ($posts as $post)
                 <a href="/post/detail/{{ $post->id }}">
@@ -88,13 +95,12 @@
                         </div>
                     </div>
                 </a>
-           
-           
                 @endforeach
             </div>
         </div>
     </div>
     <x-footer></x-footer>
+  
 </body>
 <script src="{{ asset('/js/app.js') }}"></script>
 <script>
@@ -109,10 +115,22 @@
         }
     }
 
-
-
-
 </script>
+
+<script>
+        function checkBlocks() {
+            const blockButton = document.getElementById('blockButton');
+            const postList = document.getElementById('postList');
+            
+            if (blockButton.textContent.trim() === 'ブロック済み') {
+                postList.hidden = true;
+            } else {
+                postList.hidden = false;
+            }
+        }
+
+        window.onload = checkBlocks;
+    </script>
 <style scoped>
     .user-page .page-container {
         padding: 0 10px;

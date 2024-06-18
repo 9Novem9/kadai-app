@@ -59,4 +59,6 @@ class BlockController extends Controller
       
         return redirect('/user/' . $user->id);
     }
+
+   
 }
