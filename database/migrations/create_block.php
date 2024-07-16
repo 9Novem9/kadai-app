@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user');
-            $table->string('blocks');
+            $table->string('block_user');
             $table->timestamps();
         });
     }

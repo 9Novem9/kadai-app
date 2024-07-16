@@ -49,20 +49,24 @@ class BlockController extends Controller
         $loginUser = Session::get('user');
 
         if ($request->isblocked) {
-          
-            $loginUser->block($id);
-            $isFollowed = $loginUser->unfollow($id);
-            
-            
-            
-        } else {
         
+            $loginUser->block($id);
+
+
+            if($loginUser->isFollowed($id));
+            {
+                $loginUser->unfollow($id);
+            }   
+               
+        } else {
+           
+
             $loginUser->unblock($id);
         }
 
       
         return redirect('/user/' . $user->id);
     }
-
-   
 }
+
+    
