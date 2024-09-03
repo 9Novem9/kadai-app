@@ -77,24 +77,34 @@ class User extends Model
      * $idのユーザーをフォロー解除する
      */
     public function unfollow($id)
-    {
-        Follow::where('user', $this->id)
-            ->where('follow_user', $id)
-            ->first()
-            ->delete();
+{
+    $follow = Follow::where('user', $this->id)
+        ->where('follow_user', $id)
+        ->first();
+
+    if ($follow) {
+        $follow->delete();
+    } else {
+        
     }
+}
  /*
     *ユーザーがブロックしているユーザーのリストを取得する
     */
     public function blockUsers()
-    {
-        $blockUsers = Block::where('user', $this->id)->get();
-        $result = [];
-        foreach ($blockUsers as $blockUser) {
-            array_push($result, $blockUser->blockUser());
+{
+    $blockerUsers = Block::where('block_user', $this->id)->get();
+    $result = [];
+
+    foreach ($blockerUsers as $blockUser) {
+        $user = $blockUser->blockerUser();
+        if ($user) {
+            $result[] = $user;
         }
-        return $result;
     }
+
+    return $result ?: []; // null の場合は空の配列を返す
+}
    /*
     ユーザーをブロックしているユーザーのリストを取得する
     */
@@ -107,18 +117,27 @@ class User extends Model
         }
         return $result;
     }
+
+    
  
    /**
      * $idのユーザーがこのユーザーをフォローしているか判定する
      */
-    public function isblocked($id)
+    public function isBlocked($id)
     {
-        foreach ($this->blockUsers() as $blockUser) {
-            if ($blockUser->id == $id) {
+        $blockedUsers = $this->blockUsers();
+    
+        if ($blockedUsers === null) {
+            \Log::warning('blockUsers() returned null for user ID ' . $this->id);
+            return false;
+        }
+    
+        foreach ($blockedUsers as $blockUser) {
+            if ($blockUser && $blockUser->id == $id) { // $blockUser が null でないことを確認
                 return true;
             }
         }
-
+    
         return false;
     }
      
@@ -126,15 +145,21 @@ class User extends Model
     {
         $block = new Block;
         $block->user = $this->id;
-        $block->blocks = $id;
+        $block->block_user = $id;
         $block->save();
     }
 
+
     public function unblock($id)
-    {
-        Block::where('user', $this->id)
-            ->where('blocks', $id)
-            ->first()
-            ->delete();
+{
+    $block = Block::where('user', $this->id)
+        ->where('block_user', $id)
+        ->first();
+
+    if ($block) {
+        $block->delete();
+    } else {
+        
     }
+}
 }
