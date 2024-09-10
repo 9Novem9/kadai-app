@@ -10,13 +10,13 @@ class Block extends Model
 {
     use HasFactory;
     
-    public function blockuser()
+    public function blockUser()
     {
-        return User::find($this->blocks);
+        return User::find($this->block_user);
     }
 
    
-    public function blockeruser()
+    public function blockerUser()
     {
         return User::find($this->user);
     }

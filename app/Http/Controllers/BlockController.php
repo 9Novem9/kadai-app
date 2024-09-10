@@ -22,56 +22,43 @@ class BlockController extends Controller
 
         $loginUser = Session::get('user');
 
-      
-        $blockUsers = $loginUser->blockedUsers; 
-        $blockerUsers = $loginUser->blockers; 
-
+    
         return view('user.block', compact('user', 'blockUsers', 'blockerUsers'));
     }
 
     public function update(Request $request, $id)
-{
-    $user = User::find($id);
-
-    if ($user == null) {
-        return dd('存在しないユーザーです');
-    }
-
-    // セッションからログインユーザーを取得
-    $loginUser = Session::get('user');
-
-    if (!$loginUser) {
-        return redirect('/')->with('error', 'ログインセッションが存在しません');
-    }
-
-    // ブロック処理
-    if ($request->input('isblocked')) {
-        // 既にブロックされていないか確認
-        $existingBlock = Block::where('id', $loginUser->id)
-                              ->where('block_user', $id)
-                              ->exists();
-
-        if (!$existingBlock) {
-            // ブロックが存在しない場合のみ新規作成
+    {
+        // idからユーザーを取得
+        $user = User::find($id);
+    
+        // ユーザーが存在するか判定
+        if ($user == null) {
+            return redirect('/')->with('error', '存在しないユーザーです');
+        }
+    
+        // セッションにログイン情報があるか確認
+        if (!Session::exists('user')) {
+            return redirect('/');
+        }
+    
+        // ログイン中のユーザーの情報を取得する
+        $loginUser = Session::get('user');
+    
+        // フォームからのデータ取得
+        $isBlock = $request->input('isBlock');
+      
+    
+        if ($isBlock == '1') {
             $loginUser->block($id);
-        }
-
-        // フォローしている場合はアンフォロー
-        if ($loginUser->isFollowed($id)) {
-            $loginUser->unfollow($id);
-        }
-    } else {
-        // ブロック解除処理
-        $block = Block::where('id', $loginUser->id)
-                      ->where('block_user', $id)
-                      ->first();
-
-        if ($block) {
+        } else {
             $loginUser->unblock($id);
         }
+    
+    if ($loginUser->isFollowed($id)) {
+        $loginUser->unfollow($id);
     }
+        // 画面表示
         return redirect('/user/' . $user->id);
     }
-}
-
     
+}

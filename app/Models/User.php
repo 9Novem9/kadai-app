@@ -92,19 +92,15 @@ class User extends Model
     *ユーザーがブロックしているユーザーのリストを取得する
     */
     public function blockUsers()
-{
-    $blockerUsers = Block::where('block_user', $this->id)->get();
-    $result = [];
-
-    foreach ($blockerUsers as $blockUser) {
-        $user = $blockUser->blockerUser();
-        if ($user) {
-            $result[] = $user;
+    {
+        $blockUsers = Block::where('user', $this->id)->get();
+        $result = [];
+        foreach ($blockUsers as $blockUser) {
+            array_push($result, $blockUser->blockUser());
         }
+        return $result;
     }
 
-    return $result ?: []; // null の場合は空の配列を返す
-}
    /*
     ユーザーをブロックしているユーザーのリストを取得する
     */
@@ -123,43 +119,41 @@ class User extends Model
    /**
      * $idのユーザーがこのユーザーをフォローしているか判定する
      */
+    
     public function isBlocked($id)
     {
-        $blockedUsers = $this->blockUsers();
-    
-        if ($blockedUsers === null) {
-            \Log::warning('blockUsers() returned null for user ID ' . $this->id);
-            return false;
-        }
-    
-        foreach ($blockedUsers as $blockUser) {
-            if ($blockUser && $blockUser->id == $id) { // $blockUser が null でないことを確認
+        foreach ($this->blockUsers() as $blockUser) {
+            if ($blockUser->id == $id) {
                 return true;
             }
         }
-    
+
         return false;
     }
-     
+
     public function block($id)
-    {
+{
+    $exists = Block::where('user', $this->id)
+        ->where('block_user', $id)
+        ->exists();
+
+    if (!$exists) {
         $block = new Block;
         $block->user = $this->id;
         $block->block_user = $id;
         $block->save();
     }
+}
 
 
-    public function unblock($id)
+public function unblock($id)
 {
     $block = Block::where('user', $this->id)
         ->where('block_user', $id)
         ->first();
-
+    
     if ($block) {
         $block->delete();
-    } else {
-        
     }
 }
 }

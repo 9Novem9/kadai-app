@@ -45,15 +45,16 @@
                         <div class="block-info">
                             <form name="block" action="/block/{{ $user->id }}" method="post">
                                 @csrf @method('PUT') 
-                                @if ($isblocked)
-                                <input type="hidden" name="isblocked" value="0" />
-                                <button class="button-white" id="blockButton" onClick="unblock()">
+                                @if ($isBlocked)
+                                <input type="hidden" name="isBlock" value="0" />
+                                <button class="button-white"  onClick="unblock()">
                                     ブロック済み
                                 </button> 
                                 @else
-                                <input type="hidden" name="isblocked" value="1" />
-                                <button class="button-black" id="blockButton">
+                                <input type="hidden" name="isBlock" value="1" />
+                                <button class="button-black" >
                                     ブロック
+                                
                                 </button> 
                                 @endif
                             </form>
@@ -109,28 +110,10 @@
             document.follow.submit();
         }
     }
-    function unblock() {
-        if (confirm("ブロックを解除しますか?")) {
-            document.block.submit();
-        }
-    }
-
+   
 </script>
 
-<script>
-        function checkBlocks() {
-            const blockButton = document.getElementById('blockButton');
-            const postList = document.getElementById('postList');
-            
-            if (blockButton.textContent.trim() === 'ブロック済み') {
-                postList.hidden = true;
-            } else {
-                postList.hidden = false;
-            }
-        }
 
-        window.onload = checkBlocks;
-    </script>
 <style scoped>
     .user-page .page-container {
         padding: 0 10px;
