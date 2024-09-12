@@ -80,26 +80,49 @@
                 </div>
             </div>
             <div class="post-list" id="postList">
-                <div class="title">投稿一覧</div>
-                @foreach ($posts as $post)
-                <a href="/post/detail/{{ $post->id }}">
-                    <div class="post">
-                        <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
-                        <div class="container">
-                            <div class="user-name">
-                                {{ $user->name }}
-                            </div>
-                            <div class="content">{{ $post->content }}</div>
-                            <div class="time-stamp">
-                                {{ $post->created_at }}
-                            </div>
-                        </div>
+            <div class="title">投稿一覧</div>
+
+@if ($isBlocked)
+    <!-- 投稿がブロックされている場合、非表示にする -->
+    <button id="showPostsButton" class="button-black" onclick="togglePostsVisibility()">投稿を表示する</button>
+    <div id="blockedPosts" style="display: none;">
+        @foreach ($posts as $post)
+        <a href="/post/detail/{{ $post->id }}">
+            <div class="post">
+                <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
+                <div class="container">
+                    <div class="user-name">
+                        {{ $user->name }}
                     </div>
-                </a>
-                @endforeach
+                    <div class="content">{{ $post->content }}</div>
+                    <div class="time-stamp">
+                        {{ $post->created_at }}
+                    </div>
+                </div>
+            </div>
+        </a>
+        @endforeach
+    </div>
+@else
+    <!-- ブロックされていない場合は投稿をすぐに表示 -->
+    @foreach ($posts as $post)
+    <a href="/post/detail/{{ $post->id }}">
+        <div class="post">
+            <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
+            <div class="container">
+                <div class="user-name">
+                    {{ $user->name }}
+                </div>
+                <div class="content">{{ $post->content }}</div>
+                <div class="time-stamp">
+                    {{ $post->created_at }}
+                </div>
             </div>
         </div>
-    </div>
+    </a>
+    @endforeach
+@endif
+</div>
     <x-footer></x-footer>
   
 </body>
@@ -112,7 +135,19 @@
     }
    
 </script>
-
+<script>
+    function togglePostsVisibility() {
+        var posts = document.getElementById('blockedPosts');
+        var button = document.getElementById('showPostsButton');
+        if (posts.style.display === "none") {
+            posts.style.display = "block";
+            button.textContent = "投稿を隠す";
+        } else {
+            posts.style.display = "none";
+            button.textContent = "投稿を表示する";
+        }
+    }
+</script>
 
 <style scoped>
     .user-page .page-container {
