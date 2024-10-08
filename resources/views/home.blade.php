@@ -15,8 +15,8 @@
 <body class="">
     <x-header></x-header>
     <div class="post-button">
-                <button class="button-white" type="submit">投稿する</button>
-            </div>
+        <button class="button-white" type="submit">投稿する</button>
+    </div>
     <div class="page home-page">
         <div class="page-title">ホーム</div>
         <div class="post-list">
@@ -54,34 +54,34 @@
         color: gray;
         padding-left: 10px;
     }
-    
+
     .home-page .post-list {
         margin-top: 10px;
     }
-    
+
     .home-page .post {
         display: flex;
         width: 100vw;
         padding: 0 10px;
     }
-    
+
     .home-page .post .container {
         width: 100%;
     }
-    
+
     .home-page .user-icon {
         width: 40px;
         height: 40px;
     }
-    
+
     .home-page .user-name {
         line-height: 40px;
     }
-    
+
     .home-page .content {
         font-size: 14px;
     }
-    
+
     .home-page .time-stamp {
         font-size: 8px;
         text-align: end;

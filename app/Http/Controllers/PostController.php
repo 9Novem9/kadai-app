@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Http\Controllers\Controller,Validator,
+use App\Http\Controllers\Controller,
+    Validator,
     Session;
 
 
@@ -28,7 +29,7 @@ class PostController extends Controller
     /**
      * 投稿処理
      */
-   
+
     function store(Request $request)
     {
 
@@ -40,24 +41,24 @@ class PostController extends Controller
 
         // ログイン中のユーザーの情報を取得する
         $loginUser = Session::get('user');
-        
+
         $rules = [
             'postContent' => 'required|max:140',
-          ];
-         
-          $errorMessage = ['required' => '必須項目です', 'max' => '140文字以下にしてください。'];
-          Validator::make($request->all(), $rules, $errorMessage)->validate();
-          
-        
-    
-        
-       
+        ];
+
+        $errorMessage = ['required' => '必須項目です', 'max' => '140文字以下にしてください。'];
+        Validator::make($request->all(), $rules, $errorMessage)->validate();
+
+
+
+
+
         // データ登録
         $post = new Post;
         $post->user = $loginUser->id;
         $post->content = $request->postContent;
         $post->save();
-       
+
         return redirect('/');
     }
 
@@ -88,13 +89,13 @@ class PostController extends Controller
         }
 
         // 画面表示
-        return view('post.detail', compact('post', 'user', 'isOwnPost'));
+        return view('post.detail', compact('post', 'user', 'isOwnPost', 'replys'));
     }
 
     /**
      * 投稿編集画面
      */
-    
+
     public function edit($id)
     {
         $post = Post::find($id);
@@ -148,7 +149,7 @@ class PostController extends Controller
     /**
      * 投稿削除処理
      */
-    public function delete(Request $request,$id)
+    public function delete(Request $request, $id)
     {
         // idから投稿を取得
         $post = Post::find($id);
@@ -176,8 +177,5 @@ class PostController extends Controller
         $post->delete();
 
         return redirect('/');
-
-        
     }
-
 }

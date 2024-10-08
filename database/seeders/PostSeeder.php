@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Post;
 use DateTime;
+
 class PostSeeder extends Seeder
 {
     /**
@@ -22,6 +23,7 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user' => '2',
+            'reply_to' => '3',
             'content' => '「ジョーのデバッグの法則」というのがあります。それは、すべてのバグは最後にプログラムを修正した個所からプラスマイナス3ステートメント以内にある、というものです',
             'created_at' => new DateTime('2020-11-02 00:00:00'),
         ]);
