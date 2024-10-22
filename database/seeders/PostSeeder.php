@@ -44,6 +44,7 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user' => '2',
+             'reply_to' => '3',
             'content' => '実際、悪いプログラマーと良いプログラマーの違いは、自分のコードとデータ構造のどちらをより重要と考えるかということだと主張します。 悪いプログラマーはコードを心配します。 優れたプログラマーは、データ構造とその関係について心配しています。',
             'created_at' => new DateTime('2020-11-06 00:00:00'),
         ]);
@@ -110,11 +111,13 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user' => '3',
+            'reply_to' => '2',
             'content' => 'これまで週80時間働いていたのを、120時間働くだけだ',
             'created_at' => new DateTime('2020-11-08 00:11:00'),
         ]);
         Post::create([
             'user' => '3',
+            'reply_to' => '3',
             'content' => '最後には太陽が拡張して地球上の全生物を破壊する',
             'created_at' => new DateTime('2020-11-10 20:14:00'),
         ]);

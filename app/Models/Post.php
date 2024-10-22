@@ -17,10 +17,10 @@ class Post extends Model
     {
         return User::find($this->user);
     }
-    public function replys()
-    {
-        return Post::where('reply_to', $this->id)
-            ->where('is_deleted', false)
-            ->get();
-    }
+   public function replies()
+{
+    return $this->hasMany(Post::class, 'reply_to')
+                ->where('is_deleted', false);
+}
+    
 }

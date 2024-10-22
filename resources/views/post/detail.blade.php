@@ -13,8 +13,8 @@
 
 <body class="">
     <x-header></x-header>
-    @if ($isOwnPost)
     <div class="page post-detail-page">
+        <!-- メインのポスト表示 (これは1回のみ表示される) -->
         <div class="post">
             <a href="/user/{{ $user->id }}">
                 <div class="user-info">
@@ -25,9 +25,11 @@
                 <div class="time-stamp">{{ $post->created_at }}</div>
             </a>
 
+            <!-- 投稿者本人の場合のみ編集と削除ボタンを表示 -->
+            @if ($isOwnPost)
             <div class="menu">
                 <div class="menu-item font-blue">
-                    <a href="/post/edit/{{ $post->id }}">へえんしゅうう</a>
+                    <a href="/post/edit/{{ $post->id }}">編集</a>
                 </div>
                 <form name="delete" action="/post/delete/{{ $post->id }}" method="post">
                     @csrf
@@ -36,41 +38,33 @@
                     </div>
                 </form>
             </div>
-            @foreach ($replys as $reply)
-            <div class="post">
-                <a href="/user//{{ $reply->id }}">
-                    <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
+            @endif
+        </div>
+
+        <!-- リプライの表示 (メインポストとは別のループ) -->
+        @foreach ($replys as $reply)
+        <div class="post">
+            <a href="/user/{{ $reply->id }}">
+                <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
+            </a>
+            <div class="container">
+                <a href="/user/{{ $reply->id }}">
+                    <div class="user-name">
+                        {{ $reply->name }}
+                    </div>
                 </a>
-                <div class="container">
-                    <a href="/user/{{ $reply->id  }}">
-                        <div class="user-name">
-                            {{ $reply->name }}
-                        </div>
-                    </a>
-                    <a href="/post/detail//{{ $reply->id }}" <div class="content">
+                <a href="/post/detail/{{ $reply->id }}">
+                    <div class="content">
                         {{ $reply->content }}
-                </div>
+                    </div>
+                </a>
                 <div class="time-stamp">
                     {{ $reply->created_at }}
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
-    </div>
-    </div>
-    @else
-    <div class="page post-detail-page">
-        <div class="post">
-            <a href="/user/{{ $user->id }}">
-                <div class="user-info">
-                    <img class="user-icon" src="{{ asset('/img/user_icon.png') }}" alt="" />
-                    <div class="user-name">{{ $user->name }}</div>
-                </div>
-                <div class="content">{{ $post->content }}</div>
-                <div class="time-stamp">{{ $post->created_at }}</div>
-            </a>
-
-            @endif
 </body>
 <x-footer></x-footer>
 <script src="{{ asset('/js/app.js') }}"></script>
