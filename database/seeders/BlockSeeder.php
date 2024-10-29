@@ -16,11 +16,11 @@ class BlockSeeder extends Seeder
     public function run()
     {
         Block::create([
-            'user' => '1',
+            'user' => '3',
             'block_user' => '2',
         ]);
         Block::create([
-            'user' => '1',
+            'user' => '2',
             'block_user' => '3',
         ]);
         Block::create([

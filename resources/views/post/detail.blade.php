@@ -14,7 +14,6 @@
 <body class="">
     <x-header></x-header>
     <div class="page post-detail-page">
-        <!-- メインのポスト表示 (これは1回のみ表示される) -->
         <div class="post">
             <a href="/user/{{ $user->id }}">
                 <div class="user-info">
@@ -25,7 +24,6 @@
                 <div class="time-stamp">{{ $post->created_at }}</div>
             </a>
 
-            <!-- 投稿者本人の場合のみ編集と削除ボタンを表示 -->
             @if ($isOwnPost)
             <div class="menu">
                 <div class="menu-item font-blue">
@@ -41,7 +39,6 @@
             @endif
         </div>
 
-        <!-- リプライの表示 (メインポストとは別のループ) -->
         @foreach ($replys as $reply)
         <div class="post">
             <a href="/user/{{ $reply->id }}">
@@ -61,6 +58,7 @@
                 <div class="time-stamp">
                     {{ $reply->created_at }}
                 </div>
+                <button class="reply-button" data-reply-id="{{ $reply->id }}">リプライする</button>
             </div>
         </div>
         @endforeach

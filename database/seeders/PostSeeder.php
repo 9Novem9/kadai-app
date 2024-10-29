@@ -23,12 +23,13 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user' => '2',
-            'reply_to' => '3',
+            'reply_to' => '1',
             'content' => '「ジョーのデバッグの法則」というのがあります。それは、すべてのバグは最後にプログラムを修正した個所からプラスマイナス3ステートメント以内にある、というものです',
             'created_at' => new DateTime('2020-11-02 00:00:00'),
         ]);
         Post::create([
             'user' => '2',
+            'reply_to' => '20',
             'content' => 'もしそれがよい考えなら、思い切ってそれをしなさい。許可をもらうよりも、謝るほうが簡単だから',
             'created_at' => new DateTime('2020-11-03 00:00:00'),
         ]);
@@ -111,7 +112,7 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user' => '3',
-            'reply_to' => '2',
+            'reply_to' => '1',
             'content' => 'これまで週80時間働いていたのを、120時間働くだけだ',
             'created_at' => new DateTime('2020-11-08 00:11:00'),
         ]);
