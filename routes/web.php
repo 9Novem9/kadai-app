@@ -38,6 +38,8 @@ Route::post('/login',  [LoginController::class, 'login']);
 /** ログアウト処理 */
 Route::post('/logout',  [LoginController::class, 'logout']);
 
+
+
 /*-------------------------------------------------------------------------
 | 投稿
 | -------------------------------------------------------------------------
@@ -58,6 +60,7 @@ Route::put('/post/edit/{id}', [PostController::class, 'update']);
 /** 投稿削除処理 */
 Route::post('/post/delete/{id}', [PostController::class, 'delete']);
 
+Route::post('/post/{postId}/reply', [PostController::class, 'reply'])->name('post.reply');
 
 /*-------------------------------------------------------------------------
 | ユーザー

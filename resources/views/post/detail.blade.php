@@ -7,6 +7,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('/css/reset.css') }}" />
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>kadai-app | 投稿詳細</title>
 </head>
 <!-- 投稿詳細画面 -->
@@ -39,6 +41,12 @@
             @endif
         </div>
 
+        <!-- リプライ入力フォーム -->
+        <div class="reply-form">
+            <textarea id="reply-content" placeholder="リプライを入力してください"></textarea>
+            <button id="submit-reply" data-post-id="{{ $post->id }}">リプライ送信</button>
+        </div>
+
         @foreach ($replys as $reply)
         <div class="post">
             <a href="/user/{{ $reply->id }}">
@@ -46,80 +54,114 @@
             </a>
             <div class="container">
                 <a href="/user/{{ $reply->id }}">
-                    <div class="user-name">
-                        {{ $reply->name }}
-                    </div>
+                    <div class="user-name">{{ $reply->name }}</div>
                 </a>
                 <a href="/post/detail/{{ $reply->id }}">
-                    <div class="content">
-                        {{ $reply->content }}
-                    </div>
+                    <div class="content">{{ $reply->content }}</div>
                 </a>
-                <div class="time-stamp">
-                    {{ $reply->created_at }}
-                </div>
-                <button class="reply-button" data-reply-id="{{ $reply->id }}">リプライする</button>
+                <div class="time-stamp">{{ $reply->created_at }}</div>
             </div>
         </div>
         @endforeach
     </div>
-</body>
-<x-footer></x-footer>
-<script src="{{ asset('/js/app.js') }}"></script>
-<script>
-    function deletePost() {
-        if (confirm("削除しますか?")) {
-            document.delete.submit();
+    <x-footer></x-footer>
+    <script src="{{ asset('/js/app.js') }}"></script>
+    <script>
+        function deletePost() {
+            if (confirm("削除しますか?")) {
+                document.delete.submit();
+            }
         }
-    }
-</script>
-<style scoped>
-    .post-detail-page .user-icon {
-        width: 50px;
-        height: 50px;
-    }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("submit-reply").addEventListener("click", function () {
+                const postId = this.getAttribute("data-post-id");
+                const content = document.getElementById("reply-content").value.trim();
 
-    .post-detail-page .user-info {
-        display: flex;
-    }
+                // 空欄チェック
+                if (!content) {
+                    alert("リプライ内容を入力してください。");
+                    return;
+                }
 
-    .post-detail-page .user-name {
-        line-height: 50px;
-        font-size: 18px;
-    }
+                // リプライをサーバーに送信
+                fetch(`/post/${postId}/reply`, {
+                    method: "POST", // POSTメソッドを指定
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    },
+                    body: JSON.stringify({ content: content }) // ボディにリプライ内容を含める
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("サーバーエラー");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            location.reload(); // ページを再読み込みしてリプライを表示
+                        } else {
+                            alert("リプライの送信に失敗しました: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("エラー:", error);
+                        alert("リプライの送信中にエラーが発生しました。");
+                    });
+            });
+        });
+    </script>
+    <style scoped>
+        .post-detail-page .user-icon {
+            width: 50px;
+            height: 50px;
+        }
 
-    .post-detail-page .time-stamp {
-        text-align: end;
-        font-size: 14px;
-    }
+        .post-detail-page .user-info {
+            display: flex;
+        }
 
-    .post-detail-page .post {
-        padding: 0 10px;
-    }
+        .post-detail-page .user-name {
+            line-height: 50px;
+            font-size: 18px;
+        }
 
-    .post-detail-page .menu {
-        display: flex;
-        justify-content: end;
-    }
+        .post-detail-page .time-stamp {
+            text-align: end;
+            font-size: 14px;
+        }
 
-    .post-detail-page .menu-item {
-        font-size: 16px;
-        margin: 0 2px;
-    }
+        .post-detail-page .post {
+            padding: 0 10px;
+        }
 
-    .post-detail-page .menu-item {
-        font-size: 16px;
-        margin: 0 2px;
-    }
+        .post-detail-page .menu {
+            display: flex;
+            justify-content: end;
+        }
 
-    .post-detail-page .menu-item {
-        font-size: 16px;
-        margin: 0 2px;
-    }
+        .post-detail-page .menu-item {
+            font-size: 16px;
+            margin: 0 2px;
+        }
 
-    .post-detail-page .content {
-        word-wrap: break-word;
-    }
-</style>
+        .post-detail-page .menu-item {
+            font-size: 16px;
+            margin: 0 2px;
+        }
+
+        .post-detail-page .menu-item {
+            font-size: 16px;
+            margin: 0 2px;
+        }
+
+        .post-detail-page .content {
+            word-wrap: break-word;
+        }
+    </style>
 
 </html>

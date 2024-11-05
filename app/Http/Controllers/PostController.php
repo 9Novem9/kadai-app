@@ -59,6 +59,8 @@ class PostController extends Controller
         $post->content = $request->postContent;
         $post->save();
 
+
+        
         return redirect('/');
     }
 
@@ -180,4 +182,34 @@ class PostController extends Controller
 
         return redirect('/');
     }
+
+public function reply(Request $request, $postId)
+{
+    // バリデーション
+    $request->validate([
+        'content' => 'required|string|max:140'
+    ]);
+
+    // ログインしているユーザーを取得
+    $loginUser = Session::get('user');
+
+    if (!$loginUser) {
+        return response()->json(['success' => false, 'message' => 'ログインが必要です。'], 401);
+    }
+
+    // 投稿を取得
+    $post = Post::find($postId);
+    if (!$post) {
+        return response()->json(['success' => false, 'message' => '投稿が見つかりません。'], 404);
+    }
+
+    // リプライの作成
+    $reply = $post->replies()->create([
+        'user_id' => $loginUser->id,
+        'content' => $request->content,
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'リプライが送信されました']);
+}
+
 }
