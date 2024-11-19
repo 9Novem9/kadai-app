@@ -22,5 +22,5 @@ class Post extends Model
     return $this->hasMany(Post::class, 'reply_to')
                 ->where('is_deleted', false);
 }
-    
+    protected $fillable = ['user', 'content', 'reply_to', 'is_deleted'];
 }

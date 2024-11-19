@@ -204,10 +204,12 @@ public function reply(Request $request, $postId)
     }
 
     // リプライの作成
-    $reply = $post->replies()->create([
-        'user_id' => $loginUser->id,
-        'content' => $request->content,
-    ]);
+  $reply = Post::create([
+    'user' => $loginUser->id,
+    'content' => $request->content,
+    'reply_to' => $post->id,  // 親投稿ID
+    'is_deleted' => false
+]);
 
     return response()->json(['success' => true, 'message' => 'リプライが送信されました']);
 }
