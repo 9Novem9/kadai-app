@@ -50,52 +50,51 @@ class PostController extends Controller
         Validator::make($request->all(), $rules, $errorMessage)->validate();
 
 
-
-
-
         // データ登録
         $post = new Post;
         $post->user = $loginUser->id;
         $post->content = $request->postContent;
         $post->save();
 
-
-        
         return redirect('/');
     }
 
     /**
      * 投稿詳細画面遷移
      */
-    public function show($id)
-    {
-        // 指定したIDの投稿情報を取得する
-        $post = Post::find($id);
+ public function show($id)
+{
+    // 指定したIDの投稿情報を取得
+    $post = Post::find($id);
 
-        // 投稿が存在するか判定
-        if ($post == null) {
-            return dd('存在しない投稿です');
-        }
-
-        // 投稿者を取得
-        $user = $post->user();
-
-        $isOwnPost = false;
-
-        // セッションにログイン情報があるか確認
-        if (Session::exists('user')) {
-            // ログイン中のユーザーの情報を取得する
-            $loginUser = Session::get('user');
-            // 自分自身の投稿ページか判定
-            $isOwnPost = $loginUser->id == $user->id;
-        }
-
-        $replys = $post->replies;
-        
-        // 画面表示
-        return view('post.detail', compact('post', 'user', 'isOwnPost', 'replys'));
+    // 投稿が存在するか判定
+    if (!$post) {
+        return dd('存在しない投稿です');
     }
 
+    // 親投稿（リプライ元）を取得
+    $parentPost = null;
+    if ($post->reply_to) {
+        // reply_to が存在する場合、親投稿を取得
+        $parentPost = Post::find($post->reply_to);  // 親投稿を取得
+    }
+
+    // 投稿者を取得
+    $user = $post->user();
+
+    // 自分の投稿か判定
+    $isOwnPost = false;
+    if (Session::exists('user')) {
+        $loginUser = Session::get('user');
+        $isOwnPost = $loginUser->id == $user->id;
+    }
+
+    // リプライの取得
+    $replies = $post->replies()->orderBy('created_at', 'asc')->get();
+
+    // 親投稿が存在する場合、その情報をビューに渡す
+    return view('post.detail', compact('post', 'user', 'isOwnPost', 'replies', 'parentPost'));
+}
     /**
      * 投稿編集画面
      */
